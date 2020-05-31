@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import axios from "axios";
 import "./index.css";
 import Button from "./Componentes/Button";
+import fortawesome from "react-fontawesome";
+import fatwiter from "@fortawesome/free-solid-svg-icons";
+import TweetQuote from "./Componentes/twiter";
 
 class QuoteMachine extends Component {
   constructor(props) {
@@ -38,6 +41,10 @@ class QuoteMachine extends Component {
         <p>{selectedQuote.quote}</p>
         <p>{selectedQuote.author}</p>
         <Button buttonDisplayName="New quote" onClick={this._fechtQuotes} />
+        <TweetQuote
+          quote={this.state.selectedQuote.text}
+          author={this.state.selectedQuote.author}
+        />
       </div>
     );
   }
