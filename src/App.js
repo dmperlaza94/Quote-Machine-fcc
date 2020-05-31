@@ -1,26 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import axios from "axios";
+import "./index.css";
+import Button from "./Componentes/Button";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class QuoteMachine extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedQuote: undefined,
+    };
+    this._fechtQuotes = this._fechtQuotes.bind(this);
+  }
+  componentDidMount() {
+    this._fechtQuotes();
+  }
+  _fechtQuotes() {
+    axios
+      .get(
+        "https://gist.githubusercontent.com/camperbot/5a022b72e96c4c9585c32bf6a75f62d9/raw/e3c6895ce42069f0ee7e991229064f167fe8ccdc/quotes.json"
+      )
+      .then((response) => {
+        const quotes = response.data.quotes;
+        const quoteLength = quotes.length;
+        const quoteIndex = Math.floor(Math.random() * quoteLength - 1);
+        this.setState({
+          selectedQuote: quotes[quoteIndex],
+        });
+      });
+  }
+  render() {
+    const { selectedQuote } = this.state;
+    if (!selectedQuote) {
+      return null;
+    }
+    return (
+      <div id="quote-box">
+        <p>{selectedQuote.quote}</p>
+        <p>{selectedQuote.author}</p>
+        <Button buttonDisplayName="New quote" onClick={this._fechtQuotes} />
+      </div>
+    );
+  }
 }
-
-export default App;
+export default QuoteMachine;
